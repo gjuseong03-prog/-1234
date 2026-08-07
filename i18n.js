@@ -37,6 +37,11 @@ const words = {
   '가격, 신선도, 손질 상태, 서비스 경험을 사실 중심으로 적어주세요.': 'Please describe the price, freshness, preparation, and service based on your experience.',
   '제보 등록하기': 'Submit report', '선택한 시장의 커뮤니티에만 저장됩니다. 사진 없이도 제보할 수 있으며, 시연 데이터는 이 브라우저에만 저장됩니다.': 'This report is saved only in the selected market community. A photo is optional, and demo data is stored only in this browser.',
   '사진 선택': 'Choose photo', '선택된 파일 없음': 'No file selected', '사진 없음': 'No photo',
+  '사진과 경험으로 만드는 더 투명한 시장 정보': 'Clearer market information through photos and real experiences',
+  '사진과 경험으로 만드는': 'Created through photos and real experiences', '더 투명한 시장 정보': 'Clearer market information',
+  '실제 구매한 회의 상태, 가격, 상점 경험을 남겨주세요. 비방이나 개인정보가 담긴 사진은 등록하지 마세요.': 'Share the sashimi condition, price, and shop experience from your purchase. Please do not post abusive content or photos containing personal information.',
+  '바다상회': 'Bada Store', '맛있어요.': 'It was delicious.', '광어 1kg': 'Olive flounder 1 kg',
+  '예: 바다상회': 'e.g. Bada Store', '예: 광어 1kg': 'e.g. Olive flounder 1 kg',
   '구매 가격': 'Purchase price', '수산물 상태': 'Seafood condition', '회 상태': 'Sashimi condition',
   '상점 평가': 'Shop rating', '후기': 'Review', '회 구매 경험 제보': 'Sashimi purchase report',
   '시장별 커뮤니티 인기글': 'Popular posts by market', '전체 보기 →': 'View all →',
@@ -97,6 +102,8 @@ function translate(source) {
   ];
   phrases.forEach(([pattern, replacement]) => { output = output.replace(pattern, replacement); });
   output = output
+    .replace(/사진과\s*경험으로\s*만드는\s*더\s*투명한\s*(시장|Markets)\s*정보/g, 'Clearer market information through photos and real experiences')
+    .replace(/실제\s*구매한\s*회의\s*상태,\s*가격,\s*상점\s*경험을\s*남겨주세요\.\s*비방이나\s*개인정보가\s*담긴\s*사진은\s*등록하지\s*마세요\./g, 'Share the sashimi condition, price, and shop experience from your purchase. Please do not post abusive content or photos containing personal information.')
     .replace(/(부산|Busan)공동어시장\s*현황/g, 'Busan Cooperative Fish Market overview')
     .replace(/8\/6\s*입항/g, 'Aug 6 arrivals')
     .replace(/8\/5\s*위판/g, 'Aug 5 auction')
@@ -118,7 +125,10 @@ function translate(source) {
     .replace(/민락/g, 'Millak')
     .replace(/기장/g, 'Gijang')
     .replace(/활어마당/g, 'Live Fish House')
-    .replace(/(\d[\d,]*)원/g, '$1 KRW');
+    .replace(/(\d[\d,]*)원/g, '$1 KRW')
+    .replace(/(\d+)items/g, '$1 items')
+    .replace(/(\d[\d,]*)boxes/g, '$1 boxes')
+    .replace(/(\d+)tons/g, '$1 tons');
   output = output.replace(/(자갈치시장|민락회타운|기장시장)에는 아직 등록된 구매 제보가 없습니다\./g, (_, market) => `There are no purchase reports for ${words[market]} yet.`);
   output = output.replace(/첫 번째 경험을 공유해 주세요\./g, 'Share the first experience.');
   output = output.replace(/(\d+)건/g, '$1 posts').replace(/(\d+)미/g, '$1 fish').replace(/(\d+)마리/g, '$1 fish');
