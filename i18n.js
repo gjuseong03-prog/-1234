@@ -77,7 +77,36 @@ const words = {
   '한국어': '한국어', 'English': 'English'
 };
 
+const japanese = {
+  '부산 바다값': '釜山 海の値段', '부산 바다값 커뮤니티': '釜山 海の値段コミュニティ', '부산 수산물 시세': '釜山水産物の相場',
+  '홈': 'ホーム', '시장': '市場', '수산물 시세': '水産物の相場', '가격 제보': '価格レポート', '로그인': 'ログイン', '로그아웃': 'ログアウト', '회원가입': '会員登録',
+  '시세는 바다처럼, 계속 움직입니다.': '相場は海のように、絶えず動きます。', '가격은 시장 상황과 제보에 따라 계속 변경됩니다.': '価格は市場状況とレポートに応じて変動します。',
+  '부산공동어시장 현황': '釜山共同魚市場の状況', '8/6 입항': '8月6日 入荷', '8/5 위판': '8月5日 競り', '전체 평균 위판단가': '全体の平均競り価格',
+  '수산물 종류 검색': '水産物の種類を検索', '이름 또는 별칭 입력 (예: 조피볼락, 대방어, 하모)': '名前または別名を入力（例：クロソイ、寒ブリ、ハモ）',
+  '전체': 'すべて', '어류': '魚類', '오징어·문어류': 'イカ・タコ類', '갑각류': '甲殻類', '조개·패류': '貝類',
+  '부산 시장 현황가': '釜山市場の販売価格', '공식 도매 기준가': '公式卸売基準価格', '시민 제보 중앙값': '市民レポートの中央値',
+  '최근 제보 범위': '最近のレポート範囲', '최근 24시간': '過去24時間', '어제 대비': '前日比', '7일 평균': '7日平均',
+  '평균보다 저렴': '平均よりお得', '적정 가격': '適正価格', '조금 높음': 'やや高め', '가격 확인 필요': '価格の確認が必要', '자료 수집 중': 'データ収集中',
+  '자갈치시장': 'チャガルチ市場', '민락회타운': '民楽刺身タウン', '기장시장': '機張市場', '관심시장': 'お気に入り市場', '데이터 기준': 'データ基準',
+  '사진과 경험으로 만드는': '写真と体験でつくる', '더 투명한 시장 정보': 'より透明な市場情報',
+  '실제 구매한 회의 상태, 가격, 상점 경험을 남겨주세요. 비방이나 개인정보가 담긴 사진은 등록하지 마세요.': '実際に購入した刺身の状態、価格、お店での体験を共有してください。誹謗中傷や個人情報を含む写真は投稿しないでください。',
+  '회 구매 경험 제보': '刺身購入体験レポート', '시장 선택': '市場を選択', '상점 이름': '店舗名', '구매한 수산물': '購入した水産物', '구매 가격': '購入価格', '회 상태': '刺身の状態',
+  '신선함': '新鮮', '보통': '普通', '확인 필요': '確認が必要', '회 사진 (선택 · 휴대폰 카메라 촬영 가능)': '刺身の写真（任意・スマホのカメラで撮影可能）',
+  '상점 평가': '店舗評価', '후기': 'レビュー', '제보 등록하기': 'レポートを送信', '사진 선택': '写真を選択', '선택된 파일 없음': 'ファイルが選択されていません',
+  '예: 바다상회': '例：バダ商会', '예: 광어 1kg': '例：ヒラメ 1kg', '가격, 신선도, 손질 상태, 서비스 경험을 사실 중심으로 적어주세요.': '価格、鮮度、下処理、サービス体験を事実に基づいて入力してください。',
+  '선택한 시장의 커뮤니티에만 저장됩니다. 사진 없이도 제보할 수 있으며, 시연 데이터는 이 브라우저에만 저장됩니다.': '選択した市場のコミュニティにのみ保存されます。写真なしでも投稿でき、デモデータはこのブラウザに保存されます。',
+  '광어(넙치)': 'ヒラメ', '감성돔': 'クロダイ', '농어': 'スズキ', '병어': 'マナガツオ', '줄돔': 'イサキ', '고등어': 'サバ', '오징어': 'イカ', '문어': 'タコ', '전복': 'アワビ', '굴': 'カキ', '갈치': 'タチウオ', '방어': 'ブリ', '연어': 'サーモン', '우럭': 'クロソイ', '참돔': 'マダイ', '꽃게': 'ワタリガニ', '대게': 'ズワイガニ', '킹크랩': 'タラバガニ', '바지락': 'アサリ', '가리비': 'ホタテ',
+  '활어': '活魚', '선어': '鮮魚', '국산': '韓国産', '중국산': '中国産', '일본산': '日本産', '부산': '釜山', '통영': '統営', '완도': '莞島', '목포': '木浦', '기장': '機張',
+  '바다상회': 'バダ商会', '맛있어요.': 'おいしかったです。', '도움돼요': '役に立った', '도움돼요 취소': '役に立ったを取り消す', '삭제': '削除', '조회': '閲覧',
+  '개 품목': '品目', '방금 업데이트': '更新直後', '오늘 업데이트': '本日更新', '자료 출처': 'データ出典', '공식 도매가': '公式卸売価格', '부산 시장가': '釜山市場価格'
+};
+
 function translate(source) {
+  if (language === 'ja') {
+    let output = source;
+    Object.entries(japanese).sort((a, b) => b[0].length - a[0].length).forEach(([ko, ja]) => { output = output.split(ko).join(ja); });
+    return output.replace(/(\d[\d,]*)원/g, '¥$1').replace(/(\d+)건/g, '$1件').replace(/(\d+)미/g, '$1尾').replace(/(\d+)개\s*품목/g, '$1品目');
+  }
   if (language !== 'en') return source;
   let output = source;
   Object.entries(words).sort((a, b) => b[0].length - a[0].length).forEach(([ko, en]) => { output = output.split(ko).join(en); });
@@ -159,8 +188,10 @@ function translateAttributes(element) {
 }
 
 function applyLanguage(root = document.body) {
-  document.documentElement.lang = language === 'en' ? 'en' : 'ko';
-  document.title = language === 'en'
+  document.documentElement.lang = language === 'en' ? 'en' : language === 'ja' ? 'ja' : 'ko';
+  document.title = language === 'ja'
+    ? (location.pathname.includes('커뮤니티') ? '釜山 海の値段 | コミュニティ' : '釜山 海の値段 | 水産物の相場')
+    : language === 'en'
     ? (location.pathname.includes('커뮤니티') ? 'Busan Sea Price | Community' : 'Busan Sea Price | Live Seafood Prices')
     : (location.pathname.includes('커뮤니티') ? '부산 바다값 | 회 구매 제보 커뮤니티' : '부산 바다값 | 실시간 수산물 시세');
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -183,7 +214,7 @@ function mountLanguageSelect() {
   const select = document.createElement('select');
   select.id = 'languageSelect'; select.dataset.i18nIgnore = 'true';
   select.setAttribute('aria-label', 'Language');
-  select.innerHTML = '<option value="ko">한국어</option><option value="en">English</option>';
+  select.innerHTML = '<option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option>';
   select.style.cssText = 'border:1px solid #dbe7eb;background:#fff;border-radius:99px;padding:8px 10px;color:#09283e;font:700 11px Manrope;cursor:pointer';
   select.value = language;
   select.addEventListener('change', async () => { language = select.value; await persistLanguage(); applyLanguage(); });
@@ -205,8 +236,9 @@ function mountPhotoChooser() {
   const name = document.createElement('span'); name.id = 'photoChooserName';
   const update = () => {
     const english = language === 'en';
-    button.textContent = english ? 'Choose photo' : '사진 선택';
-    name.textContent = input.files?.[0]?.name || (english ? 'No file selected' : '선택된 파일 없음');
+    const japaneseMode = language === 'ja';
+    button.textContent = english ? 'Choose photo' : japaneseMode ? '写真を選択' : '사진 선택';
+    name.textContent = input.files?.[0]?.name || (english ? 'No file selected' : japaneseMode ? 'ファイルが選択されていません' : '선택된 파일 없음');
   };
   input.style.display = 'none'; input.after(chooser); chooser.append(button, name); chooser._refresh = update; input.addEventListener('change', update); update();
 }
