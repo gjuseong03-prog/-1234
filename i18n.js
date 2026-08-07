@@ -292,6 +292,27 @@ function mountPhotoChooser() {
   input.style.display = 'none'; input.after(chooser); chooser.append(button, name); chooser._refresh = update; input.addEventListener('change', update); update();
 }
 
+function mountLocationMap() {
+  if (document.body.dataset.locationMapReady || !location.pathname.endsWith('index.html') && location.pathname !== '/') return;
+  document.body.dataset.locationMapReady = 'true';
+  const points = [[35.0967,129.0305],[35.1537,129.1204],[35.2441,129.2137]];
+  const distance = (a,b,c,d) => { const r=6371,rad=x=>x*Math.PI/180,x=rad(c-a),y=rad(d-b),h=Math.sin(x/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(y/2)**2; return r*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h)); };
+  document.addEventListener('click', event => {
+    const line = event.target.closest?.('#markets .marketline'); if (!line) return;
+    const index = [...document.querySelectorAll('#markets .marketline')].indexOf(line); if (index < 0) return;
+    setTimeout(() => {
+      const dialog = document.querySelector('#dialog'), point = points[index]; if (!dialog) return;
+      dialog.insertAdjacentHTML('beforeend', `<section style="margin-top:14px"><iframe title="market map" src="https://www.google.com/maps?q=${point[0]},${point[1]}&z=14&output=embed" style="width:100%;height:185px;border:0;border-radius:12px;background:#eaf2f4" loading="lazy"></iframe><p id="locationRouteStatus" style="font-size:12px;color:#668092">현재 위치를 확인하면 시장까지의 거리와 길찾기를 안내합니다.</p><button id="locationRouteButton" class="user" style="width:100%;background:#0077b6;color:#fff;border:0">⌖ 내 위치에서 길찾기</button></section>`);
+      document.querySelector('#locationRouteButton')?.addEventListener('click', () => {
+        const status = document.querySelector('#locationRouteStatus'), open = origin => window.open(`https://www.google.com/maps/dir/?api=1${origin ? `&origin=${origin}` : ''}&destination=${point[0]},${point[1]}&travelmode=transit`, '_blank', 'noopener');
+        if (!navigator.geolocation) { status.textContent='이 브라우저는 위치 정보를 지원하지 않습니다. 시장 위치 지도를 엽니다.'; open(); return; }
+        status.textContent='현재 위치를 확인하는 중입니다…';
+        navigator.geolocation.getCurrentPosition(pos => { const km=distance(pos.coords.latitude,pos.coords.longitude,point[0],point[1]).toFixed(1); status.textContent=`현재 위치 기준 약 ${km}km · 지도 길찾기를 엽니다.`; open(`${pos.coords.latitude},${pos.coords.longitude}`); }, () => { status.textContent='위치 권한을 허용하지 않아 시장 위치 지도를 엽니다.'; open(); }, { enableHighAccuracy:true, timeout:10000, maximumAge:300000 });
+      }, { once:true });
+    }, 0);
+  });
+}
+
 const observer = new MutationObserver(mutations => {
   mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
     if (node.nodeType === Node.TEXT_NODE) translateTextNode(node);
@@ -300,7 +321,7 @@ const observer = new MutationObserver(mutations => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  mountLanguageSelect(); mountPhotoChooser(); applyLanguage(); observer.observe(document.body, { childList:true, subtree:true });
+  mountLanguageSelect(); mountPhotoChooser(); mountLocationMap(); applyLanguage(); observer.observe(document.body, { childList:true, subtree:true });
 });
 
 onUserChanged(async user => {
