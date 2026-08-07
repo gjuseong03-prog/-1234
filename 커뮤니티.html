@@ -30,5 +30,73 @@
     function render(){const list=posts();document.querySelector('#feedTitle').textContent=activeMarket+' 커뮤니티';document.querySelector('#count').textContent=list.length+'건';document.querySelector('#marketTabs').innerHTML=marketNames.map(m=>'<button onclick="setMarket(\''+m+'\')" style="border:1px solid '+(m===activeMarket?'var(--sea)':'var(--line)')+';background:'+(m===activeMarket?'var(--sea)':'#fff')+';color:'+(m===activeMarket?'#fff':'var(--ink)')+';padding:7px 9px;border-radius:99px;font:700 10px Manrope;cursor:pointer">'+m+'</button>').join('');document.querySelector('#feed').innerHTML=list.length?list.map(p=>{const image=p.photo?'<img src="'+p.photo+'" alt="'+p.item+' 구매 사진">':'<img alt="사진 없음" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23e8f1f2\'/%3E%3Ctext x=\'50%25\' y=\'52%25\' text-anchor=\'middle\' fill=\'%23668092\' font-size=\'16\'%3E사진 없음%3C/text%3E%3C/svg%3E">';const shop=p.shop?'<span class="badge">'+p.shop+'</span>':'';return '<article class="post">'+image+'<div><h3>'+p.item+' · '+p.price.toLocaleString()+'원</h3><div class="badges"><span class="badge">'+p.condition+'</span>'+shop+'</div><p>'+(p.review||'후기 내용이 없습니다.')+'</p><div class="score">'+'★'.repeat(p.score)+'☆'.repeat(5-p.score)+' '+p.score+'.0 / 5.0</div><div class="post-foot"><span>'+p.createdAt+'</span><button class="like" onclick="like('+p.id+')">도움돼요 '+p.likes+'</button></div></div></article>'}).join(''):'<div class="empty">'+activeMarket+'에는 아직 등록된 구매 제보가 없습니다.<br>첫 번째 경험을 공유해 주세요.</div>'}
     const requestedMarket=new URLSearchParams(location.search).get('market');if(marketNames.includes(requestedMarket)){activeMarket=requestedMarket;document.querySelector('#market').value=requestedMarket}function viewerId(){const user=JSON.parse(localStorage.getItem('badagap-user')||'null');if(user?.id)return user.id;let guest=localStorage.getItem('badagap-community-guest');if(!guest){guest='guest-'+crypto.randomUUID();localStorage.setItem('badagap-community-guest',guest)}return guest}function deletePost(id){if(!confirm('이 게시글을 삭제할까요?'))return;save(posts().filter(post=>post.id!==id));render()}function like(id){const user=JSON.parse(localStorage.getItem('badagap-user')||'null');if(!user){alert('도움돼요는 로그인 후 한 계정당 한 번만 누를 수 있습니다.');return}const list=posts(),post=list.find(p=>p.id===id);if(!post)return;post.likedBy=post.likedBy||[];if(post.likedBy.includes(user.id)){post.likedBy=post.likedBy.filter(id=>id!==user.id);post.likes=Math.max(0,(post.likes||1)-1);save(list);render();return}post.likedBy.push(user.id);post.likes=(post.likes||0)+1;save(list);render()}function recordViews(){const viewer=viewerId(),list=posts();let changed=false;list.forEach(post=>{post.views=post.views||0;post.viewedBy=post.viewedBy||[];if(!post.viewedBy.includes(viewer)){post.viewedBy.push(viewer);post.views++;changed=true}});if(changed)save(list);return list}const baseCommunityRender=render;render=function(){const list=recordViews();baseCommunityRender();[...document.querySelectorAll('#feed .post')].forEach((post,index)=>{const item=list[index];if(!item)return;const foot=post.querySelector('.post-foot');foot.insertAdjacentHTML('afterbegin','<span style="margin-right:auto">조회 '+(item.views||0)+'</span>');foot.insertAdjacentHTML('beforeend','<button class="like" style="margin-left:6px;color:#c84d54" onclick="deletePost('+item.id+')">삭제</button>')})};render();
   </script>
+  <script type="module">
+    import { auth, createCommunityPost, fetchCommunityPosts, onUserChanged, removeCommunityPost, toggleCommunityLike } from './firebase-service.js';
+
+    const cloudMarkets = ['자갈치시장', '민락회타운', '기장시장'];
+    let cloudActiveMarket = new URLSearchParams(location.search).get('market') || '자갈치시장';
+    let cloudScore = 0;
+    let cloudPhoto = '';
+    let cloudPosts = [];
+    const $ = selector => document.querySelector(selector);
+    const escapeHtml = value => String(value || '').replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[char]);
+    const emptyImage = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='100%25' height='100%25' fill='%23e8f1f2'/%3E%3Ctext x='50%25' y='52%25' text-anchor='middle' fill='%23668092' font-size='16'%3E%EC%82%AC%EC%A7%84%20%EC%97%86%EC%9D%8C%3C/text%3E%3C/svg%3E`;
+
+    if (!cloudMarkets.includes(cloudActiveMarket)) cloudActiveMarket = '자갈치시장';
+    $('#market').value = cloudActiveMarket;
+
+    function renderCloud() {
+      const list = cloudPosts.filter(post => post.market === cloudActiveMarket);
+      $('#feedTitle').textContent = cloudActiveMarket + ' 커뮤니티';
+      $('#count').textContent = list.length + '건';
+      $('#marketTabs').innerHTML = cloudMarkets.map(m => `<button onclick="setMarket('${m}')" style="border:1px solid ${m === cloudActiveMarket ? 'var(--sea)' : 'var(--line)'};background:${m === cloudActiveMarket ? 'var(--sea)' : '#fff'};color:${m === cloudActiveMarket ? '#fff' : 'var(--ink)'};padding:7px 9px;border-radius:99px;font:700 10px Manrope;cursor:pointer">${m}</button>`).join('');
+      $('#feed').innerHTML = list.length ? list.map(post => {
+        const mine = auth.currentUser?.uid === post.userId;
+        const liked = (post.likedBy || []).includes(auth.currentUser?.uid);
+        const image = post.photo ? `<img src="${post.photo}" alt="${escapeHtml(post.item)} 구매 사진">` : `<img src="${emptyImage}" alt="사진 없음">`;
+        return `<article class="post">${image}<div><h3>${escapeHtml(post.item)} · ${Number(post.price || 0).toLocaleString()}원</h3><div class="badges"><span class="badge">${escapeHtml(post.condition)}</span>${post.shop ? `<span class="badge">${escapeHtml(post.shop)}</span>` : ''}</div><p>${escapeHtml(post.review || '후기 내용이 없습니다.')}</p><div class="score">${'★'.repeat(Number(post.score || 0))}${'☆'.repeat(5 - Number(post.score || 0))} ${Number(post.score || 0)}.0 / 5.0</div><div class="post-foot"><span>${escapeHtml(post.createdAtText || '방금 전')}</span><span><button class="like" onclick="likePost('${post.id}')">${liked ? '도움돼요 취소' : '도움돼요'} ${Number(post.likes || 0)}</button>${mine ? `<button class="like" style="margin-left:6px;color:#c84d54" onclick="deletePost('${post.id}')">삭제</button>` : ''}</span></div></div></article>`;
+      }).join('') : `<div class="empty">${cloudActiveMarket}에는 아직 등록된 구매 제보가 없습니다.<br>첫 번째 경험을 공유해 주세요.</div>`;
+    }
+
+    async function loadCloudPosts() {
+      try { cloudPosts = await fetchCommunityPosts(); renderCloud(); }
+      catch (error) { console.error(error); $('#feed').innerHTML = '<div class="empty">커뮤니티를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</div>'; }
+    }
+
+    window.setScore = n => { cloudScore = n; [...$('#stars').children].forEach((button, index) => button.classList.toggle('on', index < n)); };
+    window.setMarket = market => { cloudActiveMarket = market; $('#market').value = market; renderCloud(); };
+    window.submitPost = async () => {
+      const market = $('#market').value, item = $('#item').value.trim(), price = Number($('#price').value), shop = $('#shop').value.trim(), review = $('#review').value.trim();
+      if (!auth.currentUser) { alert('게시글은 로그인 후 등록할 수 있습니다.'); return; }
+      if (!item || !price || !cloudScore) { alert('수산물, 가격, 별점은 필수입니다.'); return; }
+      try {
+        await createCommunityPost({ market, shop, item, price, condition: $('#condition').value, score: cloudScore, review, photo: cloudPhoto, createdAtText: new Date().toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' }) });
+        $('#shop').value = ''; $('#item').value = ''; $('#price').value = ''; $('#review').value = ''; $('#photo').value = ''; $('#preview').style.display = 'none'; cloudPhoto = ''; window.setScore(0); cloudActiveMarket = market;
+        await loadCloudPosts();
+      } catch (error) { console.error(error); alert('게시글을 저장하지 못했습니다. 로그인 상태와 네트워크를 확인해 주세요.'); }
+    };
+    window.deletePost = async id => {
+      if (!confirm('이 게시글을 삭제할까요?')) return;
+      try { await removeCommunityPost(id); await loadCloudPosts(); }
+      catch (_) { alert('본인이 작성한 게시글만 삭제할 수 있습니다.'); }
+    };
+    window.likePost = async id => {
+      const post = cloudPosts.find(item => item.id === id);
+      if (!auth.currentUser) { alert('도움돼요는 로그인 후 누를 수 있습니다.'); return; }
+      try { await toggleCommunityLike(post); await loadCloudPosts(); }
+      catch (_) { alert('도움돼요 처리에 실패했습니다.'); }
+    };
+
+    $('#photo').addEventListener('change', event => {
+      const file = event.target.files[0]; if (!file) return;
+      if (file.size > 500 * 1024) { alert('사진은 모든 기기에서 보이도록 500KB 이하로 선택해 주세요.'); event.target.value = ''; return; }
+      const reader = new FileReader();
+      reader.onload = () => { cloudPhoto = reader.result; $('#preview img').src = cloudPhoto; $('#preview').style.display = 'block'; };
+      reader.readAsDataURL(file);
+    });
+
+    onUserChanged(() => { renderCloud(); });
+    loadCloudPosts();
+  </script>
 </body>
 </html>

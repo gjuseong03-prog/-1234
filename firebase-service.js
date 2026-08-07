@@ -8,6 +8,8 @@ import {
 } from 'https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js';
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -74,3 +76,14 @@ export async function updateCommunityPost(id, changes) {
 }
 
 export const addOneView = (id) => updateDoc(doc(db, 'community_posts', id), { views: increment(1) });
+
+export async function toggleCommunityLike(post) {
+  if (!auth.currentUser) throw new Error('로그인이 필요합니다.');
+  const uid = auth.currentUser.uid;
+  const likedBy = post.likedBy || [];
+  const alreadyLiked = likedBy.includes(uid);
+  await updateDoc(doc(db, 'community_posts', post.id), {
+    likedBy: alreadyLiked ? arrayRemove(uid) : arrayUnion(uid),
+    likes: increment(alreadyLiked ? -1 : 1),
+  });
+}
