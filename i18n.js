@@ -28,6 +28,15 @@ const words = {
   '수산물 시세': 'Seafood prices', '수산물 시세 전체 보기': 'View all seafood prices', '수산물 시세 접기': 'Collapse seafood prices',
   '가격 제보': 'Price report', '현장 가격 제보': 'On-site price report', '제보 등록하기': 'Submit report',
   '시장 선택': 'Choose market', '상점 이름': 'Shop name', '구매한 수산물': 'Seafood purchased',
+  '부산공동어시장 현황': 'Busan Cooperative Fish Market overview', '8/6 입항': 'Aug 6 arrivals', '8/5 위판': 'Aug 5 auction',
+  '전체 평균 위판단가': 'Overall average auction price', '고등어·매가리': 'Mackerel · horse mackerel', '잡어': 'Mixed fish', '톤': 'tons',
+  '수산물 종류 검색': 'Search seafood types', '이름 또는 별칭 입력 (예: 조피볼락, 대방어, 하모)': 'Enter a name or alias (e.g. rockfish, large yellowtail, pike conger)',
+  '수산물 시세 전체 보기': 'View all seafood prices', '수산물 시세 접기': 'Collapse seafood prices', '개 품목': 'items', '시장': 'Markets', '홈': 'Home',
+  '예: 바다상회': 'e.g. Bada Store', '예: 광어 1kg': 'e.g. Olive flounder 1 kg',
+  '회 사진 (선택 · 휴대폰 카메라 촬영 가능)': 'Sashimi photo (optional · mobile camera available)', '상점 평가': 'Shop rating', '후기': 'Review',
+  '가격, 신선도, 손질 상태, 서비스 경험을 사실 중심으로 적어주세요.': 'Please describe the price, freshness, preparation, and service based on your experience.',
+  '제보 등록하기': 'Submit report', '선택한 시장의 커뮤니티에만 저장됩니다. 사진 없이도 제보할 수 있으며, 시연 데이터는 이 브라우저에만 저장됩니다.': 'This report is saved only in the selected market community. A photo is optional, and demo data is stored only in this browser.',
+  '사진 선택': 'Choose photo', '선택된 파일 없음': 'No file selected', '사진 없음': 'No photo',
   '구매 가격': 'Purchase price', '수산물 상태': 'Seafood condition', '회 상태': 'Sashimi condition',
   '상점 평가': 'Shop rating', '후기': 'Review', '회 구매 경험 제보': 'Sashimi purchase report',
   '시장별 커뮤니티 인기글': 'Popular posts by market', '전체 보기 →': 'View all →',
@@ -88,6 +97,15 @@ function translate(source) {
   ];
   phrases.forEach(([pattern, replacement]) => { output = output.replace(pattern, replacement); });
   output = output
+    .replace(/(부산|Busan)공동어시장\s*현황/g, 'Busan Cooperative Fish Market overview')
+    .replace(/8\/6\s*입항/g, 'Aug 6 arrivals')
+    .replace(/8\/5\s*위판/g, 'Aug 5 auction')
+    .replace(/전체\s*평균\s*위판단가/g, 'Overall average auction price')
+    .replace(/고등어·매가리/g, 'Mackerel · horse mackerel')
+    .replace(/잡어/g, 'Mixed fish')
+    .replace(/수산물\s*종류\s*검색/g, 'Search seafood types')
+    .replace(/수산물\s*시세\s*전체\s*보기/g, 'View all seafood prices')
+    .replace(/(\d+)개\s*품목/g, '$1 items')
     .replace(/부산\s*수산물\s*시세/g, 'Busan seafood prices')
     .replace(/자갈치시장/g, 'Jagalchi Market')
     .replace(/민락회타운/g, 'Millak Raw Fish Town')
@@ -139,6 +157,7 @@ function applyLanguage(root = document.body) {
   const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
   nodes.forEach(translateTextNode);
   root.querySelectorAll?.('*').forEach(translateAttributes);
+  mountPhotoChooser();
   const select = document.querySelector('#languageSelect'); if (select) select.value = language;
 }
 
@@ -163,6 +182,25 @@ function mountLanguageSelect() {
   else document.querySelector('.head')?.append(select);
 }
 
+function mountPhotoChooser() {
+  const input = document.querySelector('#photo[type="file"]');
+  if (!input) return;
+  const existing = document.querySelector('#photoChooser');
+  if (existing) { existing._refresh?.(); return; }
+  const chooser = document.createElement('label');
+  chooser.id = 'photoChooser'; chooser.htmlFor = 'photo'; chooser.dataset.i18nIgnore = 'true';
+  chooser.style.cssText = 'display:flex;align-items:center;gap:9px;min-height:42px;padding:0 12px;border:1px solid #d8e5ea;border-radius:10px;color:#173b53;font:700 12px Manrope;cursor:pointer;background:#fff';
+  const button = document.createElement('span');
+  button.style.cssText = 'padding:7px 10px;border-radius:7px;background:#edf5f7;color:#09283e';
+  const name = document.createElement('span'); name.id = 'photoChooserName';
+  const update = () => {
+    const english = language === 'en';
+    button.textContent = english ? 'Choose photo' : '사진 선택';
+    name.textContent = input.files?.[0]?.name || (english ? 'No file selected' : '선택된 파일 없음');
+  };
+  input.style.display = 'none'; input.after(chooser); chooser.append(button, name); chooser._refresh = update; input.addEventListener('change', update); update();
+}
+
 const observer = new MutationObserver(mutations => {
   mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
     if (node.nodeType === Node.TEXT_NODE) translateTextNode(node);
@@ -171,7 +209,7 @@ const observer = new MutationObserver(mutations => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  mountLanguageSelect(); applyLanguage(); observer.observe(document.body, { childList:true, subtree:true });
+  mountLanguageSelect(); mountPhotoChooser(); applyLanguage(); observer.observe(document.body, { childList:true, subtree:true });
 });
 
 onUserChanged(async user => {
