@@ -34,7 +34,7 @@ const firebaseMessage = (error) => {
   return '처리하지 못했습니다. 잠시 후 다시 시도해 주세요.';
 };
 const saveCloudProfile = async () => {
-  if (!user || !firebaseReady) return;
+  if (!user) return;
   const api = await firebaseApi();
   await api.saveMyData(user.id, {
     displayName: user.name,
@@ -61,7 +61,7 @@ async function registerAccount() {
     user = { id: result.user.uid, name, email };
     favs = []; marketFavs = [];
     localStorage.setItem('badagap-user', JSON.stringify(user));
-    await saveCloudProfile();
+    await api.saveMyData(user.id, { displayName: name, email, favoriteItems: [], favoriteMarkets: [], interests: [] });
     document.querySelector('#login').textContent = '♥ ' + name;
     closeModal(); render(); renderMarkets(); toast('회원가입과 로그인이 완료되었습니다.');
   } catch (error) { toast(firebaseMessage(error)); }
@@ -114,6 +114,13 @@ async function toggleInterest(cat) { let list = JSON.parse(localStorage.getItem(
       const profile = await api.loadMyData(firebaseUser.uid);
       user = { id: firebaseUser.uid, name: profile.displayName || firebaseUser.email.split('@')[0], email: firebaseUser.email };
       favs = profile.favoriteItems || []; marketFavs = profile.favoriteMarkets || [];
+      await api.saveMyData(firebaseUser.uid, {
+        displayName: user.name,
+        email: user.email,
+        favoriteItems: favs,
+        favoriteMarkets: marketFavs,
+        interests: profile.interests || [],
+      });
       localStorage.setItem('badagap-user', JSON.stringify(user));
       localStorage.setItem('badagap-interests-' + user.id, JSON.stringify(profile.interests || []));
       document.querySelector('#login').textContent = '♥ ' + user.name;
