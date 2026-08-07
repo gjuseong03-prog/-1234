@@ -1,9 +1,9 @@
 // Firebase 웹 앱 공개 설정값입니다. 관리자 키나 서비스 계정 키는 넣지 마세요.
 export const firebaseConfig = {
-  apiKey: 'AIzaSyAi7NH3K1JGht6GNTWGJRHvM1Roq0q5tuo',
-  authDomain: 'busan-sea-price-45fee.firebaseapp.com',
-  projectId: 'busan-sea-price-45fee',
-  storageBucket: 'busan-sea-price-45fee.firebasestorage.app',
-  messagingSenderId: '882324163398',
-  appId: '1:882324163398:web:aba96db0175c82bc17f347',
+  apiKey: 'AIzaSyDpK9tJgQ_PH-iNbyg0PzopNtp9fDVxGxQ',
+  authDomain: 'busan-price-1234.firebaseapp.com',
+  projectId: 'busan-price-1234',
+  storageBucket: 'busan-price-1234.firebasestorage.app',
+  messagingSenderId: '562059638873',
+  appId: '1:562059638873:web:206b1d969d3d4e24fd1948',
 };
