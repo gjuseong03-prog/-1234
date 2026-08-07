@@ -146,12 +146,12 @@ function translate(source) {
   if (language === 'zh') {
     let output = source;
     Object.entries(chinese).sort((a, b) => b[0].length - a[0].length).forEach(([ko, zh]) => { output = output.split(ko).join(zh); });
-    return output.replace(/(\d[\d,]*)원/g, '¥$1').replace(/(\d+)건/g, '$1条').replace(/(\d+)미/g, '$1尾').replace(/(\d+)개\s*품목/g, '$1个品种');
+    return output.replace(/(\d[\d,]*)원/g, '$1 KRW').replace(/(\d+)건/g, '$1条').replace(/(\d+)미/g, '$1尾').replace(/(\d+)개\s*품목/g, '$1个品种');
   }
   if (language === 'ja') {
     let output = source;
     Object.entries(japanese).sort((a, b) => b[0].length - a[0].length).forEach(([ko, ja]) => { output = output.split(ko).join(ja); });
-    return output.replace(/(\d[\d,]*)원/g, '¥$1').replace(/(\d+)건/g, '$1件').replace(/(\d+)미/g, '$1尾').replace(/(\d+)개\s*품목/g, '$1品目');
+    return output.replace(/(\d[\d,]*)원/g, '$1 KRW').replace(/(\d+)건/g, '$1件').replace(/(\d+)미/g, '$1尾').replace(/(\d+)개\s*품목/g, '$1品目');
   }
   if (language !== 'en') return source;
   let output = source;
