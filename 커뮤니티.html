@@ -45,8 +45,9 @@
     if (!cloudMarkets.includes(cloudActiveMarket)) cloudActiveMarket = '자갈치시장';
     $('#market').value = cloudActiveMarket;
 
+    const normalizeMarket = value => String(value || '').replace(/[\s\u200b\ufeff]/g, '');
     function renderCloud() {
-      const list = cloudPosts.filter(post => post.market === cloudActiveMarket);
+      const list = cloudPosts.filter(post => normalizeMarket(post.market) === normalizeMarket(cloudActiveMarket));
       $('#feedTitle').textContent = cloudActiveMarket + ' 커뮤니티';
       $('#count').textContent = list.length + '건';
       $('#marketTabs').innerHTML = cloudMarkets.map(m => `<button onclick="setMarket('${m}')" style="border:1px solid ${m === cloudActiveMarket ? 'var(--sea)' : 'var(--line)'};background:${m === cloudActiveMarket ? 'var(--sea)' : '#fff'};color:${m === cloudActiveMarket ? '#fff' : 'var(--ink)'};padding:7px 9px;border-radius:99px;font:700 10px Manrope;cursor:pointer">${m}</button>`).join('');
