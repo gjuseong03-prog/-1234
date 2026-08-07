@@ -112,7 +112,41 @@ const japanese = {
   '갑오징어': 'コウイカ', '한치': 'ケンサキイカ', '주꾸미': 'イイダコ', '홍게': 'ベニズワイガニ', '바닷가재': 'ロブスター', '흰다리새우': 'バナメイエビ', '홍합': 'ムール貝', '키조개': 'タイラギ', '소라': 'サザエ', '새조개': 'トリガイ', '꼬막': 'ハイガイ'
 };
 
+const chinese = {
+  '부산 바다값': '釜山海鲜价格', '부산 바다값 커뮤니티': '釜山海鲜价格社区', '부산 수산물 시세': '釜山水产品行情',
+  '홈': '首页', '시장': '市场', '수산물 시세': '水产品行情', '가격 제보': '价格报告', '로그인': '登录', '로그아웃': '退出登录', '회원가입': '注册',
+  '시세는 바다처럼, 계속 움직입니다.': '行情如大海般持续变化。', '가격은 시장 상황과 제보에 따라 계속 변경됩니다.': '价格会根据市场情况和用户报告持续变化。',
+  '부산공동어시장 현황': '釜山共同鱼市场现况', '8/6 입항': '8月6日到港', '8/5 위판': '8月5日拍卖', '전체 평균 위판단가': '整体平均拍卖单价',
+  '수산물 종류 검색': '搜索水产品种类', '이름 또는 별칭 입력 (예: 조피볼락, 대방어, 하모)': '输入名称或别名（如：黑鲉、大鰤鱼、海鳗）',
+  '전체': '全部', '어류': '鱼类', '오징어·문어류': '鱿鱼·章鱼类', '갑각류': '甲壳类', '조개·패류': '贝类',
+  '부산 시장 현황가': '釜山市场销售价', '공식 도매 기준가': '官方批发基准价', '시민 제보 중앙값': '市民报告中位数', '최근 제보 범위': '近期报告范围', '최근 24시간': '过去24小时', '어제 대비': '较昨日', '7일 평균': '7日平均',
+  '평균보다 저렴': '低于平均价', '적정 가격': '合理价格', '조금 높음': '略高', '가격 확인 필요': '需要确认价格', '자료 수집 중': '数据收集中',
+  '자갈치시장': '札嘎其市场', '민락회타운': '民乐生鱼片城', '기장시장': '机张市场', '관심시장': '关注市场', '데이터 기준': '数据标准',
+  '사진과 경험으로 만드는': '通过照片和体验打造', '더 투명한 시장 정보': '更透明的市场信息',
+  '실제 구매한 회의 상태, 가격, 상점 경험을 남겨주세요. 비방이나 개인정보가 담긴 사진은 등록하지 마세요.': '请分享实际购买的生鱼片状态、价格和店铺体验。请勿发布诽谤内容或包含个人信息的照片。',
+  '회 구매 경험 제보': '生鱼片购买体验报告', '시장 선택': '选择市场', '상점 이름': '店铺名称', '구매한 수산물': '购买的水产品', '구매 가격': '购买价格', '회 상태': '生鱼片状态',
+  '신선함': '新鲜', '보통': '一般', '확인 필요': '需要确认', '회 사진 (선택 · 휴대폰 카메라 촬영 가능)': '生鱼片照片（可选·可用手机相机拍摄）', '상점 평가': '店铺评分', '후기': '评价', '제보 등록하기': '提交报告',
+  '사진 선택': '选择照片', '선택된 파일 없음': '未选择文件', '예: 바다상회': '例：大海商会', '예: 광어 1kg': '例：比目鱼 1kg',
+  '가격, 신선도, 손질 상태, 서비스 경험을 사실 중심으로 적어주세요.': '请根据实际体验填写价格、新鲜度、处理状态和服务体验。',
+  '선택한 시장의 커뮤니티에만 저장됩니다. 사진 없이도 제보할 수 있으며, 시연 데이터는 이 브라우저에만 저장됩니다.': '仅保存到所选市场的社区。可不上传照片，演示数据仅保存在此浏览器中。',
+  '시장별 커뮤니티 인기글': '各市场社区热门帖', '전체 보기': '查看全部', '시민이 남긴 실제 구매 경험으로 시장과 상점을 확인하세요.': '通过市民分享的真实购买体验了解市场和店铺。',
+  '도매 경락가·시장 판매가·시민 구매 제보가는 서로 다른 기준입니다. 가격 상태는 시장 판매가와 시민 제보 중앙값을 비교해 표시합니다.': '批发拍卖价、市场销售价和市民购买报告采用不同标准。价格状态根据市场销售价与市民报告中位数进行比较。',
+  '공식 도매가는 경락정보, 시장 현황가는 상인 등록가, 시민 제보가는 최근 24시간 자료의 중앙값을 사용합니다. 제보 3건 미만은 공개하지 않습니다.': '官方批发价采用拍卖信息，市场价格采用商户登记价，市民报告采用过去24小时的中位数。少于3条报告时不公开。',
+  '추가 모니터링 품목': '其他监测品种', '공식 자료 확인 후 시세 카드에 추가됩니다.': '确认官方资料后将添加到行情卡。', '현재 가격은 프로토타입 시연용 데이터이며 실제 시세와 다를 수 있습니다.': '当前价格为原型演示数据，可能与实际行情不同。',
+  '새 시세가 업데이트되었습니다': '新行情已更新', '맨 위로': '返回顶部', '매가리': '竹荚鱼', '잡어': '杂鱼', '상자': '箱', '톤': '吨',
+  '광어(넙치)': '比目鱼', '감성돔': '黑鲷', '농어': '海鲈鱼', '병어': '鲳鱼', '줄돔': '鸡鱼', '고등어': '鲭鱼', '갈치': '带鱼', '방어': '鰤鱼', '부시리': '勘八鱼', '연어': '三文鱼', '우럭': '黑鲉', '참돔': '真鲷', '오징어': '鱿鱼', '문어': '章鱼', '전복': '鲍鱼', '굴': '牡蛎', '꽃게': '梭子蟹', '대게': '雪蟹', '킹크랩': '帝王蟹', '바지락': '蛤蜊', '가리비': '扇贝',
+  '활어': '活鱼', '선어': '鲜鱼', '국산': '韩国产', '중국산': '中国产', '일본산': '日本产', '부산': '釜山', '통영': '统营', '완도': '莞岛', '목포': '木浦', '기장': '机张',
+  '자갈치 바다상회': '札嘎其大海商会', '민락 활어마당': '民乐活鱼广场', '기장 앞바다수산': '机张近海水产', '자갈치 금빛수산': '札嘎其金色水产', '자갈치 남항상회': '札嘎其南港商会', '민락 해풍수산': '民乐海风水产',
+  '자갈치': '札嘎其', '민락': '民乐', '활어마당': '活鱼广场', '앞바다수산': '近海水产', '금빛수산': '金色水产', '남항상회': '南港商会', '해풍수산': '海风水产',
+  '바다상회': '大海商会', '맛있어요.': '很好吃。', '도움돼요': '有帮助', '도움돼요 취소': '取消有帮助', '삭제': '删除', '조회': '浏览', '개 품목': '个品种', '방금 업데이트': '刚刚更新', '오늘 업데이트': '今日更新', '공식 도매가': '官方批发价', '부산 시장가': '釜山市场价'
+};
+
 function translate(source) {
+  if (language === 'zh') {
+    let output = source;
+    Object.entries(chinese).sort((a, b) => b[0].length - a[0].length).forEach(([ko, zh]) => { output = output.split(ko).join(zh); });
+    return output.replace(/(\d[\d,]*)원/g, '¥$1').replace(/(\d+)건/g, '$1条').replace(/(\d+)미/g, '$1尾').replace(/(\d+)개\s*품목/g, '$1个品种');
+  }
   if (language === 'ja') {
     let output = source;
     Object.entries(japanese).sort((a, b) => b[0].length - a[0].length).forEach(([ko, ja]) => { output = output.split(ko).join(ja); });
@@ -199,8 +233,10 @@ function translateAttributes(element) {
 }
 
 function applyLanguage(root = document.body) {
-  document.documentElement.lang = language === 'en' ? 'en' : language === 'ja' ? 'ja' : 'ko';
-  document.title = language === 'ja'
+  document.documentElement.lang = language === 'en' ? 'en' : language === 'ja' ? 'ja' : language === 'zh' ? 'zh-CN' : 'ko';
+  document.title = language === 'zh'
+    ? (location.pathname.includes('커뮤니티') ? '釜山海鲜价格 | 社区' : '釜山海鲜价格 | 水产品行情')
+    : language === 'ja'
     ? (location.pathname.includes('커뮤니티') ? '釜山 海の値段 | コミュニティ' : '釜山 海の値段 | 水産物の相場')
     : language === 'en'
     ? (location.pathname.includes('커뮤니티') ? 'Busan Sea Price | Community' : 'Busan Sea Price | Live Seafood Prices')
@@ -225,7 +261,7 @@ function mountLanguageSelect() {
   const select = document.createElement('select');
   select.id = 'languageSelect'; select.dataset.i18nIgnore = 'true';
   select.setAttribute('aria-label', 'Language');
-  select.innerHTML = '<option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option>';
+  select.innerHTML = '<option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option>';
   select.style.cssText = 'border:1px solid #dbe7eb;background:#fff;border-radius:99px;padding:8px 10px;color:#09283e;font:700 11px Manrope;cursor:pointer';
   select.value = language;
   select.addEventListener('change', async () => { language = select.value; await persistLanguage(); applyLanguage(); });
@@ -248,8 +284,9 @@ function mountPhotoChooser() {
   const update = () => {
     const english = language === 'en';
     const japaneseMode = language === 'ja';
-    button.textContent = english ? 'Choose photo' : japaneseMode ? '写真を選択' : '사진 선택';
-    name.textContent = input.files?.[0]?.name || (english ? 'No file selected' : japaneseMode ? 'ファイルが選択されていません' : '선택된 파일 없음');
+    const chineseMode = language === 'zh';
+    button.textContent = english ? 'Choose photo' : japaneseMode ? '写真を選択' : chineseMode ? '选择照片' : '사진 선택';
+    name.textContent = input.files?.[0]?.name || (english ? 'No file selected' : japaneseMode ? 'ファイルが選択されていません' : chineseMode ? '未选择文件' : '선택된 파일 없음');
   };
   input.style.display = 'none'; input.after(chooser); chooser.append(button, name); chooser._refresh = update; input.addEventListener('change', update); update();
 }
