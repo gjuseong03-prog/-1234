@@ -63,6 +63,22 @@
       try { cloudPosts = await fetchCommunityPosts(); renderCloud(); }
       catch (error) { console.error(error); $('#feed').innerHTML = '<div class="empty">커뮤니티를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</div>'; }
     }
+    async function migrateLocalPosts() {
+      const firebaseUser = auth.currentUser;
+      if (!firebaseUser || localStorage.getItem('badagap-community-migrated-' + firebaseUser.uid)) return 0;
+      let migrated = 0;
+      for (const market of cloudMarkets) {
+        const legacy = JSON.parse(localStorage.getItem('badagap-community-posts-' + market) || '[]');
+        for (const post of legacy) {
+          try {
+            await createCommunityPost({ market, shop: post.shop || '', item: post.item || '수산물', price: Number(post.price || 0), condition: post.condition || '상태 확인 필요', score: Number(post.score || 0), review: post.review || '', photo: String(post.photo || '').length <= 700000 ? post.photo || '' : '', createdAtText: post.createdAt || '이전 게시글', likes: Number(post.likes || 0), likedBy: post.likedBy || [] });
+            migrated++;
+          } catch (error) { console.warn('이전 글 이전 실패', error); }
+        }
+      }
+      localStorage.setItem('badagap-community-migrated-' + firebaseUser.uid, '1');
+      return migrated;
+    }
 
     window.setScore = n => { cloudScore = n; [...$('#stars').children].forEach((button, index) => button.classList.toggle('on', index < n)); };
     window.setMarket = market => { cloudActiveMarket = market; $('#market').value = market; renderCloud(); };
@@ -96,7 +112,14 @@
       reader.readAsDataURL(file);
     });
 
-    onUserChanged(() => { renderCloud(); });
+    onUserChanged(async firebaseUser => {
+      if (firebaseUser) {
+        const migrated = await migrateLocalPosts();
+        if (migrated) alert(`이 브라우저의 기존 커뮤니티 글 ${migrated}건을 모든 기기에서 보이도록 옮겼습니다.`);
+        await loadCloudPosts();
+      }
+      renderCloud();
+    });
     loadCloudPosts();
   </script>
 </body>
