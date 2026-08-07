@@ -38,6 +38,8 @@ const words = {
   '사진 없음': 'No photo', '상점 정보 없음': 'No shop information', '상태 제보': 'Condition report',
   '신선함': 'Fresh', '보통': 'Average', '확인 필요': 'Needs checking', '상태 확인 필요': 'Condition needs checking',
   '자갈치시장': 'Jagalchi Market', '민락회타운': 'Millak Raw Fish Town', '기장시장': 'Gijang Market',
+  '자갈치 바다상회': 'Jagalchi Bada Store', '민락 활어마당': 'Millak Live Fish House', '기장 앞바다수산': 'Gijang Seaside Seafood', '자갈치 금빛수산': 'Jagalchi Gold Seafood',
+  '자갈치': 'Jagalchi', '민락': 'Millak', '활어마당': 'Live Fish House',
   '광어(넙치)': 'Olive flounder', '강도다리': 'Starry flounder', '돌가자미': 'Stone flounder', '참가자미': 'Brown sole',
   '고등어': 'Mackerel', '전갱이': 'Horse mackerel', '갈치': 'Hairtail', '삼치': 'Spanish mackerel', '꽁치': 'Pacific saury',
   '청어': 'Herring', '방어': 'Yellowtail', '부시리': 'Amberjack', '연어': 'Salmon', '숭어': 'Grey mullet', '참숭어': 'So-iuy mullet',
@@ -85,6 +87,20 @@ function translate(source) {
     [/조금\s*높음/g, 'Slightly high']
   ];
   phrases.forEach(([pattern, replacement]) => { output = output.replace(pattern, replacement); });
+  output = output
+    .replace(/부산\s*수산물\s*시세/g, 'Busan seafood prices')
+    .replace(/자갈치시장/g, 'Jagalchi Market')
+    .replace(/민락회타운/g, 'Millak Raw Fish Town')
+    .replace(/기장시장/g, 'Gijang Market')
+    .replace(/자갈치\s*바다상회/g, 'Jagalchi Bada Store')
+    .replace(/민락\s*활어마당/g, 'Millak Live Fish House')
+    .replace(/기장\s*앞바다수산/g, 'Gijang Seaside Seafood')
+    .replace(/자갈치\s*금빛수산/g, 'Jagalchi Gold Seafood')
+    .replace(/자갈치/g, 'Jagalchi')
+    .replace(/민락/g, 'Millak')
+    .replace(/기장/g, 'Gijang')
+    .replace(/활어마당/g, 'Live Fish House')
+    .replace(/(\d[\d,]*)원/g, '$1 KRW');
   output = output.replace(/(자갈치시장|민락회타운|기장시장)에는 아직 등록된 구매 제보가 없습니다\./g, (_, market) => `There are no purchase reports for ${words[market]} yet.`);
   output = output.replace(/첫 번째 경험을 공유해 주세요\./g, 'Share the first experience.');
   output = output.replace(/(\d+)건/g, '$1 posts').replace(/(\d+)미/g, '$1 fish').replace(/(\d+)마리/g, '$1 fish');
