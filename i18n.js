@@ -306,6 +306,18 @@ onUserChanged(async user => {
   if (!user) return;
   try {
     const profile = await loadMyData(user.uid);
-    if (profile.language && profile.language !== language) { language = profile.language; applyLanguage(); }
+    // The language just chosen in this browser must win over an older profile value.
+    // Otherwise moving to another page can briefly reset Chinese/Japanese back to Korean.
+    const browserLanguage = localStorage.getItem(languageKey);
+    const supported = ['ko', 'en', 'ja', 'zh'];
+    if (supported.includes(browserLanguage)) {
+      language = browserLanguage;
+      applyLanguage();
+      if (profile.language !== browserLanguage) await saveMyData(user.uid, { language: browserLanguage });
+    } else if (supported.includes(profile.language)) {
+      language = profile.language;
+      localStorage.setItem(languageKey, language);
+      applyLanguage();
+    }
   } catch (_) {}
 });
